@@ -1,0 +1,142 @@
+@startuml WagKupalApp
+
+class apiGateway << API GATEWAY >> {
+    + GET /login
+    + GET /logout
+    + POST /api/v1.0.0/contribute
+    + GET /api/v1.0.0/home
+}
+
+class GoogleAuthenticator {
+    - googleClient
+    - googleSecretKey: String
+    - secretKey: String
+    ..methods..
+    + boolean isLoggedIn()
+    - User getInformation()
+    - boolean validCredentials()
+}
+
+class SessionHandler {
+    - User 
+    ..methods..
+    + void startSession(User)
+    + void endSession(User)
+    - boolean isValidated(User)
+}
+
+class Registrar {
+    - User
+    - databaseIP: String
+    ..methods..
+    + void addUser(User)
+    + boolean userExist(User)
+}
+
+class FileOrganizer {
+    - User 
+    - TopicConnection
+    - uploadQueue: queue
+    ..methods..
+    + FileOrganizer(User)
+    + void contribute(File, topic_id)
+}
+
+class TopicRecorder {
+    - Topic
+    - ContributionRecorder
+    - ContributionsConnection
+    - dbPath: String
+    ..methods..
+    + Topic Recorder(Topic)
+    - Topic[] getTopics()
+    + Map<String, boolean> getContributionPerTopic(user)
+    + boolean addContributionToTopic(user, topic_id)
+}
+
+
+class ContributionRecorder {
+    - Contributions
+    - dbPath: String
+    - FileUploader
+    ..methods..
+    + ContributionRecorder(contributions)
+    + boolean hasContributed(user, topic_id)
+    + boolean addContribution(user, topic_id)
+}
+
+class FileUploader {
+    - FileStoragePath: String
+    - dbPath: String
+    ..methods..
+    + FileUploader(dbConnection)
+    + boolean upload(File)
+}
+
+class FileViewer {
+    - File
+    ..methods..
+    + showFile(File)
+}
+
+package "Database" {
+    class Contributions {
+        - _id: String
+        - email: String
+        - file: String
+        - timestamp: String
+        - topic_id: String
+    }
+
+    class User {
+        - email: String
+        - name: String
+    }
+
+    class Topic {
+        - _id: String
+        - name: String
+        - description: String
+        - group_id: String
+    }
+
+    class Group {
+        - _id: String
+        - name: String
+        - description: String
+    }
+} 
+
+package "FileStorage"{
+    class File {
+        - filePath: String
+        - topic: String
+    }
+}
+
+
+Contributions ..|> User : depends >
+Contributions ..|> Topic : depends >
+Topic ..|> Group : depends >
+
+note top of GoogleAuthenticator : User Logins here
+note top of apiGateway : User Interacts here
+
+GoogleAuthenticator ..> apiGateway : Implements >
+GoogleAuthenticator o-- SessionHandler : Gives User Data >
+SessionHandler o-- FileOrganizer : Gives User data >
+SessionHandler o-- Registrar : checks for new Users >
+FileOrganizer *-- TopicRecorder : Gets Info >
+FileOrganizer o-- FileViewer : Uses >
+
+TopicRecorder --> Topic : Updates >
+TopicRecorder *-- ContributionRecorder : Gets Info >
+
+ContributionRecorder o-- FileUploader : Calls >
+ContributionRecorder --> Contributions : Updates >
+
+Registrar ..|> User : Checks >
+FileUploader --> File: Uploads >
+FileViewer --> File : Loads files >
+
+@enduml
