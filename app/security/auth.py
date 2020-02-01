@@ -1,7 +1,7 @@
 from __future__ import print_function
 import pickle
 import os.path
-from googleapiclient.discovery import build
+
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 
@@ -10,7 +10,7 @@ class auth:
     def __init__(self, SCOPES):
         self.SCOPES = SCOPES
 
-    def getDrive(self):
+    def get_credentials(self):
         creds = None
         pickle_path = './security/token.pickle'
 
@@ -32,5 +32,4 @@ class auth:
             with open(pickle_path, 'wb') as token:
                 pickle.dump(creds, token)
 
-        service = build('drive', 'v3', credentials=creds)
-        return service
+        return creds

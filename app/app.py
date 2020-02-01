@@ -16,10 +16,14 @@ from oauthlib.oauth2 import WebApplicationClient
 import requests
 
 # Internal imports
+# DB
 from db.db import init_db_command
 from models.user import User
 from models.organization import Organization
+# Security
 import security.auth as security
+# Objects
+from lib.contribution_organizer import ContributionOrganizer
 
 # Configuration
 # If modifying these scopes, delete the file token.pickle.
@@ -31,7 +35,8 @@ GOOGLE_DISCOVERY_URL = (
 )
 
 autInstance = security.auth(SCOPES)
-drive = autInstance.getDrive()
+credentials = autInstance.get_credentials()
+organizer = ContributionOrganizer(credentials)
 
 # Flask app setup
 app = Flask(__name__)
@@ -189,7 +194,7 @@ def get_topics():
 
 @app.route("/api/v1.0.0/contribution" , methods=['POST'])
 def add_contribution():
-    
+    print('Hello')
     # TODO Sequence: 
     # Add file to specific topic 
     # check if user has access
