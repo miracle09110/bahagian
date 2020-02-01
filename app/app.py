@@ -4,7 +4,7 @@ import os
 import sqlite3
 
 # Third-party libraries
-from flask import Flask, redirect, request, url_for
+from flask import Flask, redirect, request, url_for, jsonify
 from flask_login import (
     LoginManager,
     current_user,
@@ -18,21 +18,20 @@ import requests
 # Internal imports
 from db.db import init_db_command
 from models.user import User
+from models.organization import Organization
 import security.auth as security
 
+# Configuration
 # If modifying these scopes, delete the file token.pickle.
 SCOPES = ['https://www.googleapis.com/auth/drive.metadata.readonly']
-
-autInstance = security.auth(SCOPES)
-drive = autInstance.getDrive()
-
-
-# Configuration
 GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID", None)
 GOOGLE_CLIENT_SECRET = os.environ.get("GOOGLE_CLIENT_SECRET", None)
 GOOGLE_DISCOVERY_URL = (
     "https://accounts.google.com/.well-known/openid-configuration"
 )
+
+autInstance = security.auth(SCOPES)
+drive = autInstance.getDrive()
 
 # Flask app setup
 app = Flask(__name__)
@@ -58,6 +57,8 @@ client = WebApplicationClient(GOOGLE_CLIENT_ID)
 def load_user(user_id):
     return User.get(user_id)
 
+def get_google_provider_cfg():
+    return requests.get(GOOGLE_DISCOVERY_URL).json()
 
 @app.route("/")
 def index():
@@ -72,9 +73,6 @@ def index():
         )
     else:
         return '<a class="button" href="/login">Google Login</a>'
-
-def get_google_provider_cfg():
-    return requests.get(GOOGLE_DISCOVERY_URL).json()
 
 @app.route("/login")
 def login():
@@ -152,19 +150,52 @@ def logout():
     logout_user()
     return redirect(url_for("index"))
 
-def printFiles():
-    results = drive.files().list(
-        pageSize=10, fields="nextPageToken, files(id, name)").execute()
-    items = results.get('files', [])
 
-    if not items:
-        print('No files found.')
-    else:
-        print('Files:')
-        for item in items:
-            print(u'{0} ({1})'.format(item['name'], item['id']))
+@app.route("/api/v1.0.0/org", methods=['POST'])
+def create_group():
+    if not request.json:
+        abort(400)
+        
+    Organization.create(request.json['name'],request.json['description'])
+
+    return 'Created',201
+
+@app.route("/api/v1.0.0/org/<org_id>")
+def get_group(org_id):
+    org =  Organization.get(org_id) 
+    return jsonify({ 'org': org.toJSON() });
+
+@app.route("/api/v1.0.0/topic" , methods=['POST'])
+def add_topic():
+    if not request.json:
+        abort(400)
+
+    # TODO Sequence: 
+    # File Creation on drive
+    # Permission only to user who created
+    # Save to database
+
+@app.route("/api/v1.0.0/topics/<org_id>")
+def get_topics():
+    if not request.json:
+        abort(400)
+
+    # TODO Sequence: 
+    # Get all topics for an organization
+    # Get all contributions for specific topic_id 
+    # For all contributions if no email match, mark no contribution
+    # Mark contribution if exists
+    # Return  
+
+@app.route("/api/v1.0.0/contribution" , methods=['POST'])
+def add_contribution():
+    
+    # TODO Sequence: 
+    # Add file to specific topic 
+    # check if user has access
+    # allow user to access specific topic
+    # save contribution data to database
 
 if __name__ == "__main__":
-    printFiles()
     app.run(ssl_context="adhoc")
     
