@@ -61,3 +61,13 @@ class Contribution(UserMixin):
         )
         db.commit()
     
+    def toJSON(self):
+        contribution = {
+            'id' : self.id,
+            'email' : self.email,
+            'file' : self.file,
+            'topic_id' : self.topic_id,
+            'timestamp' : self.timestamp
+        }
+
+        return contribution

@@ -5,27 +5,27 @@ CREATE TABLE user (
   profile_pic TEXT NOT NULL
 );
 
-CREATE TABLE group (
-  id INTEGER PRIMARY KEY,
+CREATE TABLE organization (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
   name TEXT NOT NULL,
   description TEXT NOT NULL
 );
 
 CREATE TABLE topic (
-  id INTEGER PRIMARY KEY,
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
   name TEXT NOT NULL,
   description TEXT NOT NULL,
-  group_id INTEGER NOT NULL,
+  org_id INTEGER NOT NULL,
 
-  FOREIGN KEY (group_id)
-    REFERENCES group (id)
+  FOREIGN KEY (org_id)
+    REFERENCES organization (id)
       ON DELETE CASCADE
       ON UPDATE CASCADE
 );
 
 
 CREATE TABLE contribution (
-  id INTEGER PRIMARY KEY,
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
   email TEXT NOT NULL,
   file TEXT NOT NULL,
   topic_id  INTEGER NOT NULL,
