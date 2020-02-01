@@ -1,0 +1,2 @@
+*.pickle
+app/__pycache__
