@@ -1,6 +1,43 @@
 CREATE TABLE user (
   id TEXT PRIMARY KEY,
   name TEXT NOT NULL,
-  email TEXT UNIQUE NOT NULL,
+  email TEXT UNIQUE NOT NULL UNIQUE,
   profile_pic TEXT NOT NULL
 );
+
+CREATE TABLE group (
+  id INTEGER PRIMARY KEY,
+  name TEXT NOT NULL,
+  description TEXT NOT NULL
+);
+
+CREATE TABLE topic (
+  id INTEGER PRIMARY KEY,
+  name TEXT NOT NULL,
+  description TEXT NOT NULL,
+  group_id INTEGER NOT NULL,
+
+  FOREIGN KEY (group_id)
+    REFERENCES group (id)
+      ON DELETE CASCADE
+      ON UPDATE CASCADE
+);
+
+
+CREATE TABLE contribution (
+  id INTEGER PRIMARY KEY,
+  email TEXT NOT NULL,
+  file TEXT NOT NULL,
+  topic_id  INTEGER NOT NULL,
+  timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+
+  FOREIGN KEY (email)
+    REFERENCES user (email)
+      ON DELETE NO ACTION
+      ON UPDATE CASCADE
+  FOREIGN KEY (topic_id)
+    REFERENCES topic (id)
+      ON DELETE NO ACTION
+      ON UPDATE CASCADE
+);
+
