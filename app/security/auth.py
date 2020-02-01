@@ -12,12 +12,13 @@ class auth:
 
     def getDrive(self):
         creds = None
+        pickle_path = './security/token.pickle'
 
         # The file token.pickle stores the user's access and refresh tokens, and is
         # created automatically when the authorization flow completes for the first
         # time.
-        if os.path.exists('token.pickle'):
-            with open('token.pickle', 'rb') as token:
+        if os.path.exists(pickle_path):
+            with open(pickle_path, 'rb') as token:
                 creds = pickle.load(token)
         # If there are no (valid) credentials available, let the user log in.
         if not creds or not creds.valid:
@@ -25,10 +26,10 @@ class auth:
                 creds.refresh(Request())
             else:
                 flow = InstalledAppFlow.from_client_secrets_file(
-                    'credentials.json', self.SCOPES)
+                    './security/credentials.json', self.SCOPES)
                 creds = flow.run_local_server(port=0)
             # Save the credentials for the next run
-            with open('token.pickle', 'wb') as token:
+            with open(pickle_path, 'wb') as token:
                 pickle.dump(creds, token)
 
         service = build('drive', 'v3', credentials=creds)
