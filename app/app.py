@@ -202,5 +202,5 @@ def add_contribution():
     # save contribution data to database
 
 if __name__ == "__main__":
-    app.run(ssl_context="adhoc")
+    app.run(host=0.0.0.0, ssl_context="adhoc")
     
