@@ -62,8 +62,10 @@ client = WebApplicationClient(GOOGLE_CLIENT_ID)
 def load_user(user_id):
     return User.get(user_id)
 
+
 def get_google_provider_cfg():
     return requests.get(GOOGLE_DISCOVERY_URL).json()
+
 
 @app.route("/")
 def index():
@@ -78,6 +80,7 @@ def index():
         )
     else:
         return '<a class="button" href="/login">Google Login</a>'
+
 
 @app.route("/login")
 def login():
@@ -149,6 +152,7 @@ def callback():
     # Send user back to homepage
     return redirect(url_for("index"))
 
+
 @app.route("/logout")
 @login_required
 def logout():
@@ -160,47 +164,51 @@ def logout():
 def create_group():
     if not request.json:
         abort(400)
-        
-    Organization.create(request.json['name'],request.json['description'])
 
-    return 'Created',201
+    Organization.create(request.json['name'], request.json['description'])
+
+    return 'Created', 201
+
 
 @app.route("/api/v1.0.0/org/<org_id>")
 def get_group(org_id):
-    org =  Organization.get(org_id) 
-    return jsonify({ 'org': org.toJSON() });
+    org = Organization.get(org_id)
+    return jsonify({'org': org.toJSON()})
 
-@app.route("/api/v1.0.0/topic" , methods=['POST'])
+
+@app.route("/api/v1.0.0/topic", methods=['POST'])
 def add_topic():
     if not request.json:
         abort(400)
 
-    # TODO Sequence: 
+    # TODO Sequence:
     # File Creation on drive
     # Permission only to user who created
     # Save to database
+
 
 @app.route("/api/v1.0.0/topics/<org_id>")
 def get_topics():
     if not request.json:
         abort(400)
 
-    # TODO Sequence: 
+    # TODO Sequence:
     # Get all topics for an organization
-    # Get all contributions for specific topic_id 
+    # Get all contributions for specific topic_id
     # For all contributions if no email match, mark no contribution
     # Mark contribution if exists
-    # Return  
+    # Return
 
-@app.route("/api/v1.0.0/contribution" , methods=['POST'])
+
+@app.route("/api/v1.0.0/contribution", methods=['POST'])
 def add_contribution():
     print('Hello')
-    # TODO Sequence: 
-    # Add file to specific topic 
+    # TODO Sequence:
+    # Add file to specific topic
     # check if user has access
     # allow user to access specific topic
     # save contribution data to database
 
+
 if __name__ == "__main__":
     app.run(host='0.0.0.0', ssl_context="adhoc")
-    

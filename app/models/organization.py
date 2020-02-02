@@ -2,6 +2,7 @@ from flask_login import UserMixin
 
 from db.db import get_db
 
+
 class Organization(UserMixin):
     def __init__(self, id_, name, description):
         self.id = id_
@@ -31,12 +32,12 @@ class Organization(UserMixin):
             (name, description),
         )
         db.commit()
-    
+
     def toJSON(self):
         org = {
-            'id' : self.id,
-            'name' : self.name,
-            'description' : self.description
+            'id': self.id,
+            'name': self.name,
+            'description': self.description
         }
 
         return org

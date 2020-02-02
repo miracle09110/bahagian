@@ -2,6 +2,7 @@ from flask_login import UserMixin
 
 from db.db import get_db
 
+
 class Topic(UserMixin):
     def __init__(self, id_, name, description, org_id):
         self.id = id_
@@ -36,12 +37,11 @@ class Topic(UserMixin):
             for unparsedTopic in topics:
                 topic = Topic(
                     id_=unparsedTopic[0], name=unparsedTopic[1], description=unparsedTopic[2], org_id=unparsedTopic[3]
-                ) 
+                )
 
                 relatedTopics.append(topic)
-            
-            return relatedTopics
 
+            return relatedTopics
 
     @staticmethod
     def create(name, description, org_id):
@@ -52,13 +52,13 @@ class Topic(UserMixin):
             (name, description, org_id),
         )
         db.commit()
-    
+
     def toJSON(self):
         topic = {
-            'id' : self.id,
-            'name' : self.name,
-            'description' : self.description,
-            'org_id' : self.org_id
+            'id': self.id,
+            'name': self.name,
+            'description': self.description,
+            'org_id': self.org_id
         }
 
         return topic
