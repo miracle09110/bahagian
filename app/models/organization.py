@@ -24,12 +24,12 @@ class Organization(UserMixin):
         return org
 
     @staticmethod
-    def create(name, description):
+    def create(id, name, description):
         db = get_db()
         db.execute(
-            "INSERT INTO organization(name, description) "
-            " VALUES (?, ?)",
-            (name, description),
+            "INSERT INTO organization(id, name, description) "
+            " VALUES (?, ?, ?)",
+            (id, name, description),
         )
         db.commit()
 

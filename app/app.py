@@ -187,17 +187,13 @@ def add_topic():
     # Save to database
 
 
-@app.route("/api/v1.0.0/topics/<org_id>")
+@app.route("/api/v1.0.0/topics")
 def get_topics():
-    if not request.json:
-        abort(400)
 
-    # TODO Sequence:
-    # Get all topics for an organization
-    # Get all contributions for specific topic_id
-    # For all contributions if no email match, mark no contribution
-    # Mark contribution if exists
-    # Return
+    if not current_user:
+        abort(401)
+
+    organizer.getTopics(current_user.email)
 
 
 @app.route("/api/v1.0.0/contribution", methods=['POST'])
@@ -211,4 +207,4 @@ def add_contribution():
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', ssl_context="adhoc")
+    app.run(ssl_context="adhoc")

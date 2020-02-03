@@ -1,25 +1,28 @@
-CREATE TABLE user (
+CREATE TABLE user
+(
   id TEXT PRIMARY KEY,
   name TEXT NOT NULL,
   email TEXT UNIQUE NOT NULL UNIQUE,
   profile_pic TEXT NOT NULL
 );
 
-CREATE TABLE organization (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
+CREATE TABLE organization
+(
+  id TEXT PRIMARY KEY,
   name TEXT NOT NULL,
   description TEXT NOT NULL
 );
 
-CREATE TABLE topic (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
+CREATE TABLE topic
+(
+  id TEXT PRIMARY KEY,
   name TEXT NOT NULL,
   description TEXT NOT NULL,
-  org_id INTEGER NOT NULL,
+  org_id TEXT NOT NULL,
 
   FOREIGN KEY (org_id)
     REFERENCES organization (id)
-      ON DELETE CASCADE
+      ON DELETE NO ACTION
       ON UPDATE CASCADE
 );
 
@@ -28,16 +31,22 @@ CREATE TABLE contribution (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   email TEXT NOT NULL,
   file TEXT NOT NULL,
-  topic_id  INTEGER NOT NULL,
+  topic_id  TEXT NOT NULL,
   timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
 
-  FOREIGN KEY (email)
-    REFERENCES user (email)
-      ON DELETE NO ACTION
-      ON UPDATE CASCADE
+  FOREIGN KEY
+(email)
+    REFERENCES user
+(email)
+      ON
+DELETE NO ACTION
+      ON
+UPDATE CASCADE
   FOREIGN KEY (topic_id)
     REFERENCES topic (id)
-      ON DELETE NO ACTION
-      ON UPDATE CASCADE
+ON
+DELETE NO ACTION
+      ON
+UPDATE CASCADE
 );
 
