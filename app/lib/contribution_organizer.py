@@ -16,5 +16,5 @@ class ContributionOrganizer:
     def getDrive(self):
         return self.drive
 
-    def getTopics(self, user_email):
-        return self.topics.getTopicsForUser(user_email)
+    def getTopics(self):
+        return self.topics

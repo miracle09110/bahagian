@@ -38,6 +38,14 @@ autInstance = security.auth(SCOPES)
 credentials = autInstance.get_credentials()
 organizer = ContributionOrganizer(credentials)
 
+
+# topics = organizer.getTopics("earon09110@gmail.com")
+# print(topics)
+# folder = organizer.createTopic("trial", "earon09110@gmail.com")
+# print(folder)
+# topics=organizer.getTopics("earon09110@gmail.com")
+# print(topics)
+
 # Flask app setup
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY") or os.urandom(24)
@@ -178,13 +186,17 @@ def get_group(org_id):
 
 @app.route("/api/v1.0.0/topic", methods=['POST'])
 def add_topic():
+
+    if not current_user:
+        abort(401)
+
     if not request.json:
         abort(400)
 
-    # TODO Sequence:
-    # File Creation on drive
-    # Permission only to user who created
-    # Save to database
+    folder = organizer.getTopics().createTopic(
+        request.json['name'], current_user.email)
+
+    return jsonify({'topic': folder})
 
 
 @app.route("/api/v1.0.0/topics")
@@ -193,7 +205,9 @@ def get_topics():
     if not current_user:
         abort(401)
 
-    organizer.getTopics(current_user.email)
+    topics = organizer.getTopics().getTopicsForUser(current_user.email)
+
+    return jsonify({'topics': topics})
 
 
 @app.route("/api/v1.0.0/contribution", methods=['POST'])
@@ -205,6 +219,18 @@ def add_contribution():
     # allow user to access specific topic
     # save contribution data to database
 
+
+@app.route("/api/v1.0.0/contribution/<topic_id>")
+def get_contribution(topic_id):
+    if not current_user:
+        abort(401)
+
+    if not topic_id:
+        abort(400)
+
+    contributions = organizer.getTopics().getContributions().getContributionsForId(topic_id)
+
+    return jsonify({'contributions': contributions})
 
 if __name__ == "__main__":
     app.run(ssl_context="adhoc")
