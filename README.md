@@ -1,6 +1,6 @@
-# Wag Kupal App
+# Bahagian
 
-This app serves as a barrier for free loaders in group efforts. This filters out users who have no contribution to a specific project
+This app is to share notes with people while filtering out freeloaders
 
 ## Getting Started
 
@@ -10,6 +10,8 @@ The main application is in `app` folder. Use `cd app` before excuting any comman
 
 - Sqlite
 - Python 3.7.2
+- Google drive API
+- Oauth2
 
 ### Installing python libraries
 

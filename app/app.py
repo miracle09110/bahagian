@@ -27,7 +27,7 @@ from lib.contribution_organizer import ContributionOrganizer
 
 # Configuration
 # If modifying these scopes, delete the file token.pickle.
-SCOPES = ['https://www.googleapis.com/auth/drive.metadata.readonly']
+SCOPES = ['https://www.googleapis.com/auth/drive']
 GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID", None)
 GOOGLE_CLIENT_SECRET = os.environ.get("GOOGLE_CLIENT_SECRET", None)
 GOOGLE_DISCOVERY_URL = (
@@ -38,13 +38,6 @@ autInstance = security.auth(SCOPES)
 credentials = autInstance.get_credentials()
 organizer = ContributionOrganizer(credentials)
 
-
-# topics = organizer.getTopics("earon09110@gmail.com")
-# print(topics)
-# folder = organizer.createTopic("trial", "earon09110@gmail.com")
-# print(folder)
-# topics=organizer.getTopics("earon09110@gmail.com")
-# print(topics)
 
 # Flask app setup
 app = Flask(__name__)
@@ -228,9 +221,10 @@ def get_contribution(topic_id):
     if not topic_id:
         abort(400)
 
-    contributions = organizer.getTopics().getContributions().getContributionsForId(topic_id)
+    contributions = organizer.getTopics().getContributions().getContributionsForTopic(topic_id)
 
     return jsonify({'contributions': contributions})
+
 
 if __name__ == "__main__":
     app.run(ssl_context="adhoc")

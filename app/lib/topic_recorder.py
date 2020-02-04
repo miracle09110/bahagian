@@ -56,7 +56,7 @@ class TopicRecorder:
         }
 
         folder = self.drive.files().create(
-            body=metadata, fields="files(id, name)").execute()
+            body=metadata, fields="id").execute()
 
         if not folder.get('id'):
             abort(400)
@@ -78,7 +78,7 @@ class TopicRecorder:
         permission = self.drive.permissions().create(
             fileId=fileId,
             body=user_permission,
-            fileds='id'
+            fields='id'
         ).execute()
 
         return permission
