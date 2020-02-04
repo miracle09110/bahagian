@@ -1,0 +1,31 @@
+html,
+body {
+  margin: 0;
+  height: 100%;
+  background: #306864;
+  background: linear-gradient(#306864 20%, #ffff);
+  background: -moz-linear-gradient (#306864 20%, #ffff);
+  background: -webkit-linear-gradient (#306864 20%, #ffff);
+  background: -o-linear-gradient (#306864 20%, #ffff);
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.login {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: auto;
+  margin-top: 150px;
+  height: 300px;
+  width: 30%;
+  border-radius: 30px;
+  background-color: white;
+  padding: 10px;
+  text-align: center;
+}
+
+.login img {
+  margin: auto;
+  max-width: 50%;
+}
