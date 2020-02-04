@@ -4,7 +4,7 @@ import os
 import sqlite3
 
 # Third-party libraries
-from flask import Flask, redirect, request, url_for, jsonify
+from flask import Flask, redirect, request, url_for, jsonify, render_template
 from flask_login import (
     LoginManager,
     current_user,
@@ -40,7 +40,11 @@ organizer = ContributionOrganizer(credentials)
 
 
 # Flask app setup
-app = Flask(__name__)
+app = Flask(__name__,
+            static_url_path='',
+            static_folder='web/static',
+            template_folder='web/templates')
+
 app.secret_key = os.environ.get("SECRET_KEY") or os.urandom(24)
 
 # User session management setup
@@ -80,7 +84,7 @@ def index():
             )
         )
     else:
-        return '<a class="button" href="/login">Google Login</a>'
+        return render_template('login.html')
 
 
 @app.route("/login")
@@ -221,7 +225,8 @@ def get_contribution(topic_id):
     if not topic_id:
         abort(400)
 
-    contributions = organizer.getTopics().getContributions().getContributionsForTopic(topic_id)
+    contributions = organizer.getTopics(
+    ).getContributions().getContributionsForTopic(topic_id)
 
     return jsonify({'contributions': contributions})
 
