@@ -3,7 +3,7 @@ class ContributionRecorder:
     def __init__(self, drive):
         self.drive = drive
 
-    def getContributionsForId(self, topicId):
+    def getContributionsForTopic(self, topicId):
         results = self.drive.files().list(
             q="'" + topicId + "' in parents", fields="files(id, name)").execute()
 
