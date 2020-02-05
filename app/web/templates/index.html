@@ -1,15 +1,36 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <link rel="icon" href="/resources/images/logo.png" />
     <title>Bahagian | Weclome! {{name}}</title>
+    <link rel="icon" href="/resources/images/logo.png" />
+    <link
+      rel="stylesheet"
+      href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css"
+    />
+    <link rel="stylesheet" type="text/css" href="/css/index.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   </head>
   <body>
-    <p>Hello, {{name}}! You're logged in! Email: {{email}}</p>
-    <div>
-      <p>Google Profile Picture:</p>
-      <img src="{{profile_pic}}" alt="Google Profile Pic" />
-      <a class="button" href="/logout">Logout</a>
-    </div>
+    <section class="header">
+      <div class="title">
+        <img src="/resources/images/logo.png" />
+        <p>Your Topics</p>
+        <i class="fa fa-cloud fa-lg"></i>
+      </div>
+      <div class="user">
+        <img src="{{profile_pic}}" alt="Prof Pic" />
+        <p>{{name}} |</p>
+        <a class="button" href="/logout">Logout</a>
+      </div>
+    </section>
+
+    <script src="/js/getTopics.js"></script>
+
+    <section class="folder-list">
+      <div id="topics" class="topics"></div>
+      <a href="#" class="float">
+        <i class="fa fa-plus my-float"></i>
+      </a>
+    </section>
   </body>
 </html>
