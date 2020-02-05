@@ -75,14 +75,8 @@ def get_google_provider_cfg():
 @app.route("/")
 def index():
     if current_user.is_authenticated:
-        return (
-            "<p>Hello, {}! You're logged in! Email: {}</p>"
-            "<div><p>Google Profile Picture:</p>"
-            '<img src="{}" alt="Google profile pic"></img></div>'
-            '<a class="button" href="/logout">Logout</a>'.format(
-                current_user.name, current_user.email, current_user.profile_pic
-            )
-        )
+        return render_template('index.html', name=current_user.name.title(),
+                               email=current_user.email, profile_pic=current_user.profile_pic)
     else:
         return render_template('login.html')
 
