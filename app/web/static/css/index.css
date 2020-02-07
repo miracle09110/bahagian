@@ -154,8 +154,7 @@ body {
 }
 
 .unlock-state .action i {
-  color: grey;
-  cursor: pointer;
+  color: #66ff00;
 }
 
 /* locked state */
