@@ -14,23 +14,26 @@
     <section class="header">
       <div class="title">
         <img src="/resources/images/logo.png" />
-        <p>Your Topics</p>
+        <p>Share Files</p>
         <i class="fa fa-cloud fa-lg"></i>
-      </div>
-      <div class="user">
-        <img src="{{profile_pic}}" alt="Prof Pic" />
-        <p>{{name}} |</p>
-        <a class="button" href="/logout">Logout</a>
       </div>
     </section>
 
     <script src="/js/getTopics.js"></script>
 
-    <section class="folder-list">
-      <div id="topics" class="topics"></div>
-      <a href="#" class="float">
-        <i class="fa fa-plus my-float"></i>
-      </a>
-    </section>
+    <div class="home-body">
+      <section class="user">
+        <img src="{{profile_pic}}" alt="Prof Pic" />
+        <p>Welcome, {{name}}!</p>
+        <a class="button" href="/logout">Logout</a>
+      </section>
+
+      <section class="folder-list">
+        <div id="topics" class="topics"></div>
+        <!-- <a href="#" class="float">
+          <i class="fa fa-plus my-float"></i>
+        </a> -->
+      </section>
+    </div>
   </body>
 </html>
