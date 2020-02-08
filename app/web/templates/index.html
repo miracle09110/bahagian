@@ -7,8 +7,13 @@
       rel="stylesheet"
       href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css"
     />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
+    />
     <link rel="stylesheet" type="text/css" href="/css/index.css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
   </head>
   <body>
     <section class="header">
@@ -28,6 +33,23 @@
         <a class="button" href="/logout">Logout</a>
       </section>
 
+      <section class="add-topic">
+        <script src="/js/addTopic.js"></script>
+        <button type="button" class="collapsible">Add Topic</button>
+        <div class="content">
+          <form name="topic-form">
+            <input type="text" id="topic-name" name="name" />
+            <input
+              type="submit"
+              value="Submit"
+              onclick="onSubmitTopicForm()"
+              ;
+              return
+              false
+            />
+          </form>
+        </div>
+      </section>
       <section class="folder-list">
         <div id="topics" class="topics"></div>
         <!-- <a href="#" class="float">
