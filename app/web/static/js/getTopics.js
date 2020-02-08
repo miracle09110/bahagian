@@ -17,7 +17,7 @@ var createFolderList = result => {
   result.topics.forEach((element, index) => {
     if (element.authorized) {
       unlockView = "block";
-      lockView = "block";
+      lockView = "none";
     } else {
       unlockView = "none";
       lockView = "block";
