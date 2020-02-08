@@ -6,7 +6,7 @@ $(document).ready(function() {
     result.topics.forEach((element, index) => {
       if (element.authorized) {
         unlockView = "block";
-        lockView = "block";
+        lockView = "none";
       } else {
         unlockView = "none";
         lockView = "block";
@@ -19,7 +19,7 @@ $(document).ready(function() {
         unlockView +
         '"><div class="unlock-state"><div class="info"><i class="fa fa-folder-open fa-lg fa-fw"></i><p>' +
         element.topic.name +
-        '</p></div><div class="action"><i class="fa fa-bars fa-lg fa-fw"></i></div></div></div>';
+        '</p></div><div class="action"><i class="fa fa-check-circle fa-lg fa-fw"></i></div></div></div>';
 
       var lockedHTML =
         '<div class="folder" id="' +
