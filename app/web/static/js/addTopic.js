@@ -1,9 +1,13 @@
 const onSubmitTopicForm = () => {
   $("#add-topic-form").submit(function(event) {
-    console.log(event);
     const form = event.target;
     const topic = form.elements["topic_name"];
-    //TODO: Add proper handling and feedback
+
+    if (!topic.value) {
+      M.toast({ html: "Please provide topic name", classes: "red" });
+      return;
+    }
+
     $.ajax({
       type: "POST",
       url: "https://localhost:5000/api/v1.0.0/topic",
@@ -11,10 +15,14 @@ const onSubmitTopicForm = () => {
       dataType: "json",
       contentType: "application/json",
       success: function(data) {
-        alert("Success Added");
+        console.log(data);
+        M.toast({ html: "Topic added!", classes: "green" });
       },
       error: function(data) {
-        alert("Error");
+        M.toast({
+          html: "Error adding topic, please try again",
+          classes: "red"
+        });
       }
     });
   });
