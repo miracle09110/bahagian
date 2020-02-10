@@ -11,50 +11,71 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
     />
+
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" type="text/css" href="/css/index.css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
   </head>
   <body>
-    <section class="header">
-      <div class="title">
-        <img src="/resources/images/logo.png" />
-        <p>Share Files</p>
-        <i class="fa fa-cloud fa-lg"></i>
+    <nav>
+      <div class="header nav-wrapper">
+        <div class="title">
+          <img class="brand-logo" src="/resources/images/logo.png" />
+          <p>Shared Files</p>
+          <i class="fa fa-cloud fa-lg"></i>
+        </div>
       </div>
-    </section>
+    </nav>
 
     <script src="/js/getTopics.js"></script>
 
     <div class="home-body">
-      <section class="user">
-        <img src="{{profile_pic}}" alt="Prof Pic" />
+      <section class="user z-depth-3">
+        <img
+          class="z-depth-4 circle responsive-img"
+          src="{{profile_pic}}"
+          alt="Prof Pic"
+        />
         <p>Welcome, {{name}}!</p>
-        <a class="button" href="/logout">Logout</a>
+        <a class="waves-effect waves-purple btn-small" href="/logout">Logout</a>
       </section>
 
-      <section class="add-topic">
-        <script src="/js/addTopic.js"></script>
-        <button type="button" class="collapsible">Add Topic</button>
-        <div class="content">
-          <form name="topic-form">
-            <input type="text" id="topic-name" name="name" />
-            <input
+      <section class="add-topic z-depth-3 white">
+        <script src="/js/addTopic.js" defer></script>
+        <form id="add-topic-form">
+          <div>
+            <div class="input-field">
+              <input
+                id="topic_name"
+                type="text"
+                class="validate"
+                name="topic_name"
+              />
+              <label for="topic_name">Topic Name</label>
+            </div>
+
+            <button
+              class="btn waves-effect waves-light"
               type="submit"
-              value="Submit"
+              name="action"
               onclick="onSubmitTopicForm()"
-              ;
-              return
-              false
-            />
-          </form>
-        </div>
+            >
+              Add Topic
+              <i class="material-icons right">send</i>
+            </button>
+          </div>
+        </form>
       </section>
       <section class="folder-list">
-        <div id="topics" class="topics"></div>
-        <!-- <a href="#" class="float">
-          <i class="fa fa-plus my-float"></i>
-        </a> -->
+        <div id="topics" class="topics collection with-header z-depth-3">
+          <div>
+            <h4 class="collection header">Topics</h4>
+          </div>
+        </div>
       </section>
     </div>
   </body>

@@ -11,38 +11,42 @@ $(document).ready(function() {
 });
 
 var createFolderList = result => {
-  var unlockView = "";
-  var lockView = "";
-  var innerHTML = "";
   result.topics.forEach((element, index) => {
+    var folder = document.createElement("div");
+    folder.id = element.topic.id;
+
+    var state = document.createElement("div");
+
+    var info = document.createElement("div");
+    info.className = "info";
+
+    var action = document.createElement("div");
+    action.className = "action";
+
+    var folderIcon = document.createElement("i");
+    var icon = document.createElement("i");
+    var text = document.createElement("p");
+    text.innerHTML = element.topic.name;
+
     if (element.authorized) {
-      unlockView = "block";
-      lockView = "none";
+      folder.className = "folder collection-item z-depth-4";
+      state.className = "unlock-state";
+      icon.className = "fa fa-check-circle fa-lg fa-fw";
+      folderIcon.className = "fa fa-folder-open fa-lg fa-fw";
     } else {
-      unlockView = "none";
-      lockView = "block";
+      folder.className = "folder collection-item z-depth-1 teal darken-1";
+      state.className = "lock-state";
+      icon.className = "fa fa-lock fa-lg fa-fw";
+      folderIcon.className = "fa fa-folder fa-lg fa-fw";
     }
 
-    var unlockedHTML =
-      '<div class="folder" id="' +
-      element.topic.id +
-      '" style="display:' +
-      unlockView +
-      '"><div class="unlock-state"><div class="info"><i class="fa fa-folder-open fa-lg fa-fw"></i><p>' +
-      element.topic.name +
-      '</p></div><div class="action"><i class="fa fa-check-circle fa-lg fa-fw"></i></div></div></div>';
+    info.appendChild(folderIcon);
+    info.appendChild(text);
+    action.appendChild(icon);
+    state.appendChild(info);
+    state.appendChild(action);
+    folder.appendChild(state);
 
-    var lockedHTML =
-      '<div class="folder" id="' +
-      element.topic.id +
-      '" style="display:' +
-      lockView +
-      '"><div class="lock-state"><div class="info"><i class="fa fa-folder fa-lg fa-fw"></i><p>' +
-      element.topic.name +
-      '</p></div><div class="action"><i class="fa fa-lock fa-lg fa-fw"></i></div></div></div>';
-    innerHTML += unlockedHTML + lockedHTML;
-    if (index === result.topics.length - 1) {
-      document.getElementById("topics").innerHTML = innerHTML;
-    }
+    document.getElementById("topics").appendChild(folder);
   });
 };
