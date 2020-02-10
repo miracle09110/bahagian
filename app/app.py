@@ -203,7 +203,7 @@ def get_topics():
 
 @app.route("/api/v1.0.0/contribution", methods=['POST'])
 def add_contribution():
-    print('Hello')
+    print('Assigned to Mok')
     # TODO Sequence:
     # Add file to specific topic
     # check if user has access
