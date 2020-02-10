@@ -8,6 +8,7 @@ const onSubmitTopicForm = () => {
       return;
     }
 
+    M.toast({ html: "Updating...", classes: "purple" });
     $.ajax({
       type: "POST",
       url: "https://localhost:5000/api/v1.0.0/topic",

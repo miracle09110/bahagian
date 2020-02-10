@@ -67,6 +67,7 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  padding-bottom: 15px;
   background: white;
   background: linear-gradient(#80cbc4 50%, #ffff 50%);
   background: -moz-linear-gradient (#80cbc4 50%, #ffff 50%);
