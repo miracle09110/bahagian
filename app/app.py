@@ -26,16 +26,13 @@ import security.auth as security
 from lib.contribution_organizer import ContributionOrganizer
 
 # Configuration
-# If modifying these scopes, delete the file token.pickle.
-SCOPES = ['https://www.googleapis.com/auth/drive']
-GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID", None)
-GOOGLE_CLIENT_SECRET = os.environ.get("GOOGLE_CLIENT_SECRET", None)
-GOOGLE_DISCOVERY_URL = (
-    "https://accounts.google.com/.well-known/openid-configuration"
-)
-ALLOWED_EXTENSIONS = {'doc', 'docx', 'pdf'}
-autInstance = security.auth(SCOPES)
+autInstance = security.auth()
 credentials = autInstance.get_credentials()
+GOOGLE_CLIENT_ID = autInstance.get_google_client_id()
+GOOGLE_CLIENT_SECRET = autInstance.get_google_client_secret()
+GOOGLE_DISCOVERY_URL = autInstance.get_discovery_url()
+ALLOWED_EXTENSIONS = {'doc', 'docx', 'pdf'}
+
 organizer = ContributionOrganizer(credentials)
 
 
@@ -211,7 +208,7 @@ def add_contribution(topic_id):
     if not allowed_file(contributionFile.filename):
         return 'File Type not supported', 415
 
-    organizer.addContributionToTopic(topic_id, contributionFile)
+    organizer.getTopics().addContributionToTopic(topic_id, contributionFile)
 
     return 'OK', 200
 

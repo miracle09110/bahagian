@@ -23,8 +23,6 @@ Run the following to easily install dependencies `pip install -r requirements.tx
 
 ### Security
 
-- add to environment variables `GOOGLE_CLIENT_ID=<your google client id>`
-- add to environment variables `GOOGLE_CLIENT_SECRET=<your google client secret>`
 - add to file `credentials.json` the credentials given by google client
 
 ## Class Relations

@@ -1,5 +1,6 @@
 
 from lib.contribution_recorder import ContributionRecorder
+from werkzeug.utils import secure_filename
 
 
 class TopicRecorder:
@@ -82,3 +83,14 @@ class TopicRecorder:
         ).execute()
 
         return permission
+
+    def addContributionToTopic(self, topic_id, file):
+        # Hi MARC
+        # TODO Sequence:
+        # Add file to specific topic
+        # check if user has access
+        # allow user to access specific topic
+        # save contribution data to database
+        filename = secure_filename(
+            file.filename)  # Creates a valid file name to avoid scripting
+        print('Does nothing yet')
