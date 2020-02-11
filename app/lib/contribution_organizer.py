@@ -1,5 +1,6 @@
 from googleapiclient.discovery import build
 from lib.topic_recorder import TopicRecorder
+from werkzeug.utils import secure_filename
 
 
 class ContributionOrganizer:
@@ -18,3 +19,14 @@ class ContributionOrganizer:
 
     def getTopics(self):
         return self.topics
+
+    def addContributionToTopic(self, topic_id, file):
+        # Hi MARC
+        # TODO Sequence:
+        # Add file to specific topic
+        # check if user has access
+        # allow user to access specific topic
+        # save contribution data to database
+        filename = secure_filename(
+            file.filename)  # Creates a valid file name to avoid scripting
+        print('Does nothing yet')

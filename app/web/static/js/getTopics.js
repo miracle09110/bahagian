@@ -1,3 +1,6 @@
+const contributionAPI = "/api/v1.0.0/contribution/";
+const contributionEncryptionType = "multipart/form-data";
+
 $(document).ready(function() {
     console.log("triggered");
     $.ajax({
@@ -11,14 +14,24 @@ $(document).ready(function() {
     });
 });
 
-var uploadFile = (topicId) => {
-    console.log(topicId);
-    document.getElementById(`'${topicId}'`).submit((event) => {
-        console.log(event);
-        var form = event.target;
-        console.log(form.elements[`'input-${topicId}'`]);
+const uploadFile = (topicId) => {
+    const modalForm = document.getElementById(`form-${topicId}`);
+    const control = document.getElementById(`input-${topicId}`);
+    var files = control.files;
 
+    const confirmButton = document.getElementById(`confirm-${topicId}`);
+    confirmButton.addEventListener('click', function(event) {
+        event.preventDefault()
+        const data = new FormData();
+        data.append("contribution", files[0]);
+        const request = new XMLHttpRequest();
+        request.open(modalForm.method, modalForm.action);
+        request.onload = function() {
+            console.log("Upload complete.");
+        };
+        request.send(data);
     });
+
 }
 
 var createFolderList = async result => {
@@ -84,6 +97,10 @@ var createFolderList = async result => {
             //Form in modal creation follows
             var form = document.createElement('form');
             form.id = formId;
+            form.action = contributionAPI + element.topic.id
+            form.method = "post";
+            form.enctype = contributionEncryptionType;
+
 
             var fileInput = document.createElement('div');
             fileInput.className = "file-field input-field";
@@ -99,6 +116,9 @@ var createFolderList = async result => {
             inputFileUploadButton.id = inputFileUploadButtonId;
             inputFileUploadButton.name = inputFileUploadButtonId;
             inputFileUploadButton.type = "file";
+            inputFileUploadButton.addEventListener("change", function(event) {
+                uploadFile(element.topic.id)
+            })
 
             fileUploadButton.appendChild(spanFileUploadButton);
             fileUploadButton.appendChild(inputFileUploadButton);
@@ -130,9 +150,9 @@ var createFolderList = async result => {
             var confirmButton = document.createElement('a');
             var confirmButtonId = `confirm-${element.topic.id}`;
             confirmButton.id = confirmButtonId;
+            confirmButton.name = confirmButtonId;
             confirmButton.className = "waves-effect white-text blue waves-green btn-flat";
             confirmButton.innerHTML = "Confirm";
-            confirmButton.setAttribute("href", `javascript:uploadFile('${formId}')`);
 
             modalFooter.appendChild(confirmButton);
 
