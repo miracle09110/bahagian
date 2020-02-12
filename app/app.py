@@ -4,7 +4,7 @@ import os
 import sqlite3
 
 # Third-party libraries
-from flask import Flask, redirect, request, url_for, jsonify, render_template
+from flask import Flask, flash, redirect, request, url_for, jsonify, render_template
 from flask_login import (
     LoginManager,
     current_user,
@@ -26,16 +26,13 @@ import security.auth as security
 from lib.contribution_organizer import ContributionOrganizer
 
 # Configuration
-# If modifying these scopes, delete the file token.pickle.
-SCOPES = ['https://www.googleapis.com/auth/drive']
-GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID", None)
-GOOGLE_CLIENT_SECRET = os.environ.get("GOOGLE_CLIENT_SECRET", None)
-GOOGLE_DISCOVERY_URL = (
-    "https://accounts.google.com/.well-known/openid-configuration"
-)
-
-autInstance = security.auth(SCOPES)
+autInstance = security.auth()
 credentials = autInstance.get_credentials()
+GOOGLE_CLIENT_ID = autInstance.get_google_client_id()
+GOOGLE_CLIENT_SECRET = autInstance.get_google_client_secret()
+GOOGLE_DISCOVERY_URL = autInstance.get_discovery_url()
+ALLOWED_EXTENSIONS = {'doc', 'docx', 'pdf'}
+
 organizer = ContributionOrganizer(credentials)
 
 
@@ -58,7 +55,6 @@ try:
 except sqlite3.OperationalError:
     # Assume it's already been created
     pass
-
 # OAuth 2 client setup
 client = WebApplicationClient(GOOGLE_CLIENT_ID)
 
@@ -201,14 +197,20 @@ def get_topics():
     return jsonify({'topics': topics})
 
 
-@app.route("/api/v1.0.0/contribution", methods=['POST'])
-def add_contribution():
-    print('Assigned to Mok')
-    # TODO Sequence:
-    # Add file to specific topic
-    # check if user has access
-    # allow user to access specific topic
-    # save contribution data to database
+@app.route("/api/v1.0.0/contribution/<topic_id>", methods=['POST'])
+def add_contribution(topic_id):
+    if 'contribution' not in request.files:
+        flash('Please upload a file')
+        return 'No file uploaded', 400
+
+    contributionFile = request.files['contribution']
+
+    if not allowed_file(contributionFile.filename):
+        return 'File Type not supported', 415
+
+    organizer.getTopics().addContributionToTopic(topic_id, contributionFile)
+
+    return 'OK', 200
 
 
 @app.route("/api/v1.0.0/contribution/<topic_id>")
@@ -223,6 +225,11 @@ def get_contribution(topic_id):
     ).getContributions().getContributionsForTopic(topic_id)
 
     return jsonify({'contributions': contributions})
+
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
 if __name__ == "__main__":
