@@ -1,6 +1,11 @@
 
 from lib.contribution_recorder import ContributionRecorder
 from werkzeug.utils import secure_filename
+import magic
+
+google_file_conversion_dictionary = {
+    'application/msword': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+}
 
 
 class TopicRecorder:
@@ -84,13 +89,38 @@ class TopicRecorder:
 
         return permission
 
-    def addContributionToTopic(self, topic_id, file):
-        # Hi MARC
-        # TODO Sequence:
-        # Add file to specific topic
-        # check if user has access
-        # allow user to access specific topic
-        # save contribution data to database
-        filename = secure_filename(
-            file.filename)  # Creates a valid file name to avoid scripting
-        print('Does nothing yet')
+    def addContributionToTopic(self, user, topic_id, file_path, file):
+
+        filename = secure_filename(file.filename)
+        path_to_save_file = file_path / filename
+
+        if path_to_save_file.exists():
+            path_to_save_file.unlink()
+
+        if not file_path.exists():
+            file_path.mkdir()
+
+        file.save(path_to_save_file)
+
+        file_metadata = {
+            'name': filename,
+            'parents': [topic_id]
+        }
+
+        mime_type = magic.from_file(
+            str(path_to_save_file.resolve()), mime=True)
+
+        if mime_type in google_file_conversion_dictionary:
+            file_metadata['mimeType'] = google_file_conversion_dictionary[mime_type]
+
+        generated_id = self.contributions.addContribution(
+            path_to_save_file, mime_type, file_metadata)
+
+        path_to_save_file.unlink()
+
+        if generated_id is not None:
+            self.addWritePermission(topic_id, user)
+            return 'OK', 201
+
+        else:
+            abort(500)

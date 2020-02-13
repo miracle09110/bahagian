@@ -2,6 +2,7 @@
 import json
 import os
 import sqlite3
+from pathlib import Path
 
 # Third-party libraries
 from flask import Flask, flash, redirect, request, url_for, jsonify, render_template
@@ -43,7 +44,7 @@ app = Flask(__name__,
             template_folder='web/templates')
 
 app.secret_key = os.environ.get("SECRET_KEY") or os.urandom(24)
-
+app.config['UPLOAD_FOLDER'] = Path('./public')
 # User session management setup
 # https://flask-login.readthedocs.io/en/latest
 login_manager = LoginManager()
@@ -208,9 +209,7 @@ def add_contribution(topic_id):
     if not allowed_file(contributionFile.filename):
         return 'File Type not supported', 415
 
-    organizer.getTopics().addContributionToTopic(topic_id, contributionFile)
-
-    return 'OK', 200
+    return organizer.getTopics().addContributionToTopic(current_user.email, topic_id, app.config['UPLOAD_FOLDER'], contributionFile)
 
 
 @app.route("/api/v1.0.0/contribution/<topic_id>")
