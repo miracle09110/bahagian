@@ -67,11 +67,6 @@ class TopicRecorder:
         if not folder.get('id'):
             abort(400)
 
-        user_permission = self.addWritePermission(folder.get('id'), email)
-
-        if not user_permission.get('id'):
-            abort(400)
-
         return folder
 
     def addWritePermission(self, fileId, email):

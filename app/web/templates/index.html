@@ -24,7 +24,7 @@
     <nav>
       <div class="header nav-wrapper">
         <div class="title">
-          <img class="brand-logo" src="/resources/images/logo.png" />
+          <img class="brand-logo circle" src="/resources/images/logo.png" />
           <p>Shared Files</p>
           <i class="fa fa-cloud fa-lg"></i>
         </div>
@@ -46,6 +46,22 @@
 
       <section class="add-topic z-depth-3 white">
         <script src="/js/addTopic.js" defer></script>
+        <div
+          class="preloader-wrapper big active add-topic-loading"
+          id="add-topic-loading"
+        >
+          <div class="spinner-layer spinner-green-only">
+            <div class="circle-clipper left">
+              <div class="circle"></div>
+            </div>
+            <div class="gap-patch">
+              <div class="circle"></div>
+            </div>
+            <div class="circle-clipper right">
+              <div class="circle"></div>
+            </div>
+          </div>
+        </div>
         <form id="add-topic-form">
           <div>
             <div class="input-field">
@@ -74,6 +90,19 @@
         <div id="topics" class="topics collection with-header z-depth-3">
           <div>
             <h4 class="collection header">Topics</h4>
+          </div>
+          <div class="preloader-wrapper big active folder-list-loading">
+            <div class="spinner-layer spinner-green-only">
+              <div class="circle-clipper left">
+                <div class="circle"></div>
+              </div>
+              <div class="gap-patch">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-clipper right">
+                <div class="circle"></div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
