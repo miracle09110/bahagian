@@ -67,11 +67,6 @@ class TopicRecorder:
         if not folder.get('id'):
             abort(400)
 
-        user_permission = self.addWritePermission(folder.get('id'), email)
-
-        if not user_permission.get('id'):
-            abort(400)
-
         return folder
 
     def addWritePermission(self, fileId, email):
@@ -89,6 +84,9 @@ class TopicRecorder:
 
         return permission
 
+    def validContribution(self, file):
+        return True
+
     def addContributionToTopic(self, user, topic_id, file_path, file):
 
         filename = secure_filename(file.filename)
@@ -99,6 +97,9 @@ class TopicRecorder:
 
         if not file_path.exists():
             file_path.mkdir()
+
+        if not self.validContribution(file):
+            return 'Invalid Contribution', 400
 
         file.save(path_to_save_file)
 

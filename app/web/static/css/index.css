@@ -100,6 +100,11 @@ body {
   background-color: #00897b;
 }
 
+.folder-list-loading {
+  margin: auto;
+  background-color: white;
+}
+
 .topics h4 {
   padding: 10px;
   margin: 0 auto;
@@ -185,6 +190,12 @@ body {
   width: 40%;
   border: solid grey;
   border-radius: 20px;
+}
+
+.add-topic-loading {
+  display: none;
+  margin: auto;
+  margin-top: 5%;
 }
 
 .add-topic .input-field,

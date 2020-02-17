@@ -1,8 +1,11 @@
-const contributionAPI = "/api/v1.0.0/contribution/";
-const contributionEncryptionType = "multipart/form-data";
+let contributionAPI = "/api/v1.0.0/contribution/";
+let contributionEncryptionType = "multipart/form-data";
 
 $(document).ready(function() {
-  console.log("triggered");
+  requestTopics();
+});
+
+const requestTopics = () => {
   $.ajax({
     type: "GET",
     url: "https://localhost:5000/api/v1.0.0/topics",
@@ -12,7 +15,75 @@ $(document).ready(function() {
       alert("Page could not load, could you try reloading?");
     }
   });
-});
+};
+
+const showSuccess = visibleModal => {
+  M.Modal.getInstance(visibleModal).close();
+  M.toast({
+    html: "Access granted",
+    classes: "green"
+  });
+};
+
+const showError = (errMessage, modalForm) => {
+  modalForm.reset();
+  M.toast({
+    html: errMessage,
+    classes: "red"
+  });
+};
+
+const showProgress = visibleModal => {
+  const progressBar = visibleModal.getElementsByClassName("progress")[0];
+  const footer = visibleModal.getElementsByClassName("modal-footer")[0];
+  const form = visibleModal.getElementsByTagName("form")[0];
+  progressBar.style.display = "block";
+  footer.style.display = "none";
+  form.style.display = "none";
+};
+
+const showForm = visibleModal => {
+  const progressBar = visibleModal.getElementsByClassName("progress")[0];
+  const footer = visibleModal.getElementsByClassName("modal-footer")[0];
+  const form = visibleModal.getElementsByTagName("form")[0];
+  progressBar.style.display = "none";
+  footer.style.display = "block";
+  form.style.display = "block";
+};
+
+const sendUploadRequest = (visibleModal, modalForm, files) => {
+  const data = new FormData();
+  data.append("contribution", files[0]);
+  const request = new XMLHttpRequest();
+  request.open(modalForm.method, modalForm.action);
+  request.onreadystatechange = function() {
+    if (request.readyState === 4) {
+      //4 == DONE based on library
+      switch (request.status) {
+        case 201:
+          showSuccess(visibleModal);
+          requestTopics();
+          break;
+        case 415:
+          showError("Invalid file. Please use .doc, .docx, or .pdf", modalForm);
+          showForm(visibleModal);
+          break;
+        case 400:
+          showError("Oops! may mali. Try re-uploading file", modalForm);
+          showForm(visibleModal);
+          break;
+        case 500:
+        default:
+          showError(
+            "Hindi ko gets ang nangyari, paki-refresh naman",
+            modalForm
+          );
+          showForm(visibleModal);
+      }
+    }
+  };
+  request.send(data);
+};
 
 const uploadFile = topicId => {
   const modalForm = document.getElementById(`form-${topicId}`);
@@ -22,18 +93,18 @@ const uploadFile = topicId => {
   const confirmButton = document.getElementById(`confirm-${topicId}`);
   confirmButton.addEventListener("click", function(event) {
     event.preventDefault();
-    const data = new FormData();
-    data.append("contribution", files[0]);
-    const request = new XMLHttpRequest();
-    request.open(modalForm.method, modalForm.action);
-    request.onload = function() {
-      console.log("Upload complete.");
-    };
-    request.send(data);
+
+    const visibleModal = document.getElementById(`modal-${topicId}`);
+    showProgress(visibleModal);
+    sendUploadRequest(visibleModal, modalForm, files);
   });
 };
 
 var createFolderList = async result => {
+  //reset folder list
+  document.getElementById("topics").innerHTML =
+    '<div><h4 class="collection header">Topics</h4></div>';
+
   await result.topics.forEach((element, index) => {
     var folder = document.createElement("div");
     folder.id = element.topic.id;
@@ -91,8 +162,18 @@ var createFolderList = async result => {
       modalContentBody.innerHTML =
         "You will only be granted access to the requested topic once you upload a file. After contribution, access link will be sent to your email ";
 
+      // adding hidden progress bar
+      var progressbar = document.createElement("div");
+      progressbar.className = "progress";
+      progressbar.style.display = "none";
+      var progressbarType = document.createElement("div");
+      progressbarType.className = "indeterminate";
+      progressbar.appendChild(progressbarType);
+
+      //Assemble modal body
       modalContent.appendChild(modalContentHeader);
       modalContent.appendChild(modalContentBody);
+      modalContent.appendChild(progressbar);
 
       //Form in modal creation follows
       var form = document.createElement("form");
