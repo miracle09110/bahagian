@@ -100,7 +100,7 @@ const uploadFile = topicId => {
   });
 };
 
-const getContributions  = topicId => {
+const getContributions  = async topicId => {
   $.ajax({
     type: "GET",
     url: `https://127.0.0.1:5000/api/v1.0.0/contribution/${topicId}`,
@@ -125,15 +125,6 @@ const appendContributions = async (results,topicId) => {
 
   folderItem.appendChild(documentList);
   documentList.appendChild(unorderedList);
-
-  if (results.contributions.length === 0){
-    let listItem = document.createElement("li");
-    listItem.className = "collection-item";
-    listItem.innerHTML = "No contributions yet"
-    unorderedList.appendChild(listItem);
-
-    return
-  }
 
   await results.contributions.forEach(element => {
     
