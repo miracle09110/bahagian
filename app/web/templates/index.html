@@ -5,10 +5,6 @@
     <link rel="icon" href="/resources/images/logo.png" />
     <link
       rel="stylesheet"
-      href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css"
-    />
-    <link
-      rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
     />
 
@@ -87,23 +83,28 @@
         </form>
       </section>
       <section class="folder-list">
-        <div id="topics" class="topics collection with-header z-depth-3">
-          <div>
-            <h4 class="collection header">Topics</h4>
-          </div>
-          <div class="preloader-wrapper big active folder-list-loading">
-            <div class="spinner-layer spinner-green-only">
-              <div class="circle-clipper left">
-                <div class="circle"></div>
-              </div>
-              <div class="gap-patch">
-                <div class="circle"></div>
-              </div>
-              <div class="circle-clipper right">
-                <div class="circle"></div>
-              </div>
+        <ul id="topics" class="topics collapsible collection with-header z-depth-3">
+          <li class="collection-header">
+              <h4>Topics</h4>
+          </li>
+          <li class="collection-item">
+            <div class="folder-list-loading" >
+                <div class="preloader-wrapper big active">
+                  <div class="spinner-layer spinner-green-only">
+                    <div class="circle-clipper left">
+                      <div class="circle"></div>
+                    </div>
+                    <div class="gap-patch">
+                      <div class="circle"></div>
+                    </div>
+                    <div class="circle-clipper right">
+                      <div class="circle"></div>
+                    </div>
+                  </div>
+                </div>
             </div>
-          </div>
+          </li>
+        </ul>
         </div>
       </section>
     </div>

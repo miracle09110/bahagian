@@ -26,7 +26,7 @@ const onSubmitTopicForm = () => {
     showLoading();
     $.ajax({
       type: "POST",
-      url: "https://localhost:5000/api/v1.0.0/topic",
+      url: "https://127.0.0.1:5000/api/v1.0.0/topic",
       data: JSON.stringify({ name: topic.value }),
       dataType: "json",
       contentType: "application/json",

@@ -101,86 +101,55 @@ body {
 }
 
 .folder-list-loading {
+  text-align: center;
   margin: auto;
-  background-color: white;
+  width: 100%;
 }
 
-.topics h4 {
-  padding: 10px;
-  margin: 0 auto;
-}
-
-.info p {
-  margin-left: 5px;
-  font-size: 1em;
-}
-
-.topics {
-  width: auto;
-  height: auto;
+.topics .li {
   display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
+  height: 90px;
+  width: 100%;
 }
 
-/* unlock state */
-.unlock-state {
-  display: flex;
-  justify-content: space-around;
+#topics .collection-item {
+  padding-left: 15px;
 }
 
-.unlock-state .info {
+/* Folders */
+
+.folder{
   display: flex;
   align-items: center;
+  width: 100%''
+}
+
+.folder .info {
+  display: flex;
   justify-content: flex-start;
+  align-items: center;
   width: 50%;
 }
 
-.unlock-state .info i {
-  color: black;
-}
-
-.unlock-state .action {
+.folder .action {
   display: flex;
-  align-items: center;
   justify-content: flex-end;
   width: 50%;
 }
 
-.unlock-state .action i {
-  color: #66ff00;
+
+/*Info */
+.info i {
+  margin-right: 10px;
 }
 
-/* locked state */
-
-.lock-state {
-  display: flex;
-  justify-content: space-around;
-  padding: 5px;
+/* Action */
+.action a .end-item {
+  color:  yellow;
+  margin-right: 15px;
 }
 
-.lock-state .info {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  width: 50%;
-}
 
-.lock-state .info i {
-  color: black;
-}
-
-.lock-state .action {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  width: 50%;
-}
-
-.lock-state .action i {
-  color: white;
-  cursor: pointer;
-}
 
 /*Add Topic*/
 .add-topic {

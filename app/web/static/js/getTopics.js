@@ -8,7 +8,7 @@ $(document).ready(function() {
 const requestTopics = () => {
   $.ajax({
     type: "GET",
-    url: "https://localhost:5000/api/v1.0.0/topics",
+    url: "https://127.0.0.1:5000/api/v1.0.0/topics",
     success: createFolderList,
     error: function(result) {
       console.log(result);
@@ -100,51 +100,118 @@ const uploadFile = topicId => {
   });
 };
 
+const getContributions  = topicId => {
+  $.ajax({
+    type: "GET",
+    url: `https://127.0.0.1:5000/api/v1.0.0/contribution/${topicId}`,
+    success: (results) => {
+      appendContributions(results,topicId)
+    },
+    error: function (result) {
+      console.log(`Error on ${topicId} `); 
+    }
+  });
+}
+
+const appendContributions = async (results,topicId) => {
+
+  let folderItem = document.getElementById(`container-${topicId}`);
+
+  let documentList = document.createElement("div");
+  documentList.className = "collapsible-body grey";
+
+  let unorderedList = document.createElement("ul");
+  unorderedList.className = "collection";
+
+  folderItem.appendChild(documentList);
+  documentList.appendChild(unorderedList);
+
+  if (results.contributions.length === 0){
+    let listItem = document.createElement("li");
+    listItem.className = "collection-item";
+    listItem.innerHTML = "No contributions yet"
+    unorderedList.appendChild(listItem);
+
+    return
+  }
+
+  await results.contributions.forEach(element => {
+    
+    let listItem = document.createElement("li");
+    listItem.className = "collection-item";
+    listItem.innerHTML = element.name;
+
+    unorderedList.appendChild(listItem);
+   
+  }); 
+
+}
+
+
 var createFolderList = async result => {
   //reset folder list
   document.getElementById("topics").innerHTML =
-    '<div><h4 class="collection header">Topics</h4></div>';
+    '<li class="collection-header"><h4>Topics</h4></li >';
 
   await result.topics.forEach((element, index) => {
-    var folder = document.createElement("div");
+  
+    //Create Format of a Folder;
+    let listItem = document.createElement("li");
+    let folder = document.createElement("div");
     folder.id = element.topic.id;
 
-    var state = document.createElement("div");
-
-    var info = document.createElement("div");
+    let info = document.createElement("div");
     info.className = "info";
+    
+    let infoIcon = document.createElement("i");
+    infoIcon.className = "small material-icons";
 
-    var action = document.createElement("div");
+    let infoText = document.createElement("p");
+    infoText.innerHTML = element.topic.name;
+
+    let action = document.createElement("div");
     action.className = "action";
 
-    var folderIcon = document.createElement("i");
-    var icon = document.createElement("i");
-    var text = document.createElement("p");
-    text.innerHTML = element.topic.name;
+    let actionIcon = document.createElement("i");
 
+    listItem.appendChild(folder);
+    folder.appendChild(info);
+    folder.appendChild(action);
+    info.appendChild(infoIcon);
+    info.appendChild(infoText);
+    
     if (element.authorized) {
-      folder.className = "folder collection-item z-depth-4";
-      state.className = "unlock-state";
-      icon.className = "fa fa-check-circle fa-lg fa-fw";
-      folderIcon.className = "fa fa-folder-open fa-lg fa-fw";
+      listItem.className = "z-depth-4";
+      listItem.id = `container-${element.topic.id}`;
+      folder.className = "folder collapsible-header";
+      infoIcon.innerHTML = "folder_shared";
 
-      action.appendChild(icon);
+      actionIcon.className = "end-item small material-icons";
+      actionIcon.innerHTML = "more_vert";
+      action.appendChild(actionIcon);
+
+      getContributions(element.topic.id);
+
     } else {
-      folder.className = "folder collection-item z-depth-1 teal darken-1";
-      state.className = "lock-state";
-      folderIcon.className = "fa fa-folder fa-lg fa-fw";
-      icon.className = "fa fa-lock fa-lg fa-fw tooltipped";
-      icon.setAttribute("data-position", "bottom");
-      icon.setAttribute("data-tooltip", "Unlock");
+      listItem.className = "teal collection-item";
+      folder.className = "folder";
+      infoIcon.innerHTML = "block";
 
-      //anchoring image
+    
+      actionIcon.className = "end-item small material-icons tooltipped";
+      actionIcon.innerHTML = "info"
+      actionIcon.setAttribute("data-position", "bottom");
+      actionIcon.setAttribute("data-tooltip", "Unlock");
+
+      //anchoring icon
       var unlockAnchor = document.createElement("a");
 
       var modalId = `modal-${element.topic.id}`;
       unlockAnchor.className = "waves-effect waves-light modal-trigger";
       unlockAnchor.setAttribute("href", `#${modalId}`);
-      unlockAnchor.appendChild(icon);
+      unlockAnchor.appendChild(actionIcon);
       action.appendChild(unlockAnchor);
+      
 
       //Modal creation follows
       var formId = `form-${element.topic.id}`;
@@ -196,7 +263,7 @@ var createFolderList = async result => {
       inputFileUploadButton.id = inputFileUploadButtonId;
       inputFileUploadButton.name = inputFileUploadButtonId;
       inputFileUploadButton.type = "file";
-      inputFileUploadButton.addEventListener("change", function(event) {
+      inputFileUploadButton.addEventListener("change", function (event) {
         uploadFile(element.topic.id);
       });
 
@@ -243,15 +310,10 @@ var createFolderList = async result => {
       action.appendChild(modal);
     }
 
-    info.appendChild(folderIcon);
-    info.appendChild(text);
-    state.appendChild(info);
-    state.appendChild(action);
-    folder.appendChild(state);
-
-    document.getElementById("topics").appendChild(folder);
+    document.getElementById("topics").appendChild(listItem);
   });
 
   $(".tooltipped").tooltip();
   $(".modal").modal();
+  $('.collapsible').collapsible();
 };
